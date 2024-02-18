@@ -33,7 +33,15 @@ function valorNumerico(e) {
     case 'number2':
       return number.number2 = parseInt(e.target.value)
   }
-  arrayTeclas[index].style.transform = '';
+}
+
+function voltarEstado(e) {
+  const id = (e.target.id);
+  const arrayTeclas = [...document.getElementsByClassName('calculadora')[0].childNodes];
+  const index = arrayTeclas.findIndex((element) => {
+    return (element.innerHTML == e.target.value)
+  })
+  arrayTeclas[index].style.transform = 'scale(1)';
 }
 
 const resultado = (number1, number2, operacao) => {
@@ -55,8 +63,8 @@ const resultado = (number1, number2, operacao) => {
     <div>
       <h1>Insira os valores a serem calculados</h1>
       <div class="valores">
-        <input type="number" id="number1" placeholder="Selecione um número" v-on:click="valorNumerico" max="9" min="0">
-        <input type="number" id="number2" placeholder="Selecione um número" v-on:click="valorNumerico" max="9" min="0">
+        <input type="number" id="number1" placeholder="Selecione um número" @keyup="valorNumerico" @keydown="voltarEstado" max="9" min="0">
+        <input type="number" id="number2" placeholder="Selecione um número" @keyup="valorNumerico" @keydown="voltarEstado" max="9" min="0">
       </div>
       <div class="calculadora">
         <p>1</p>
