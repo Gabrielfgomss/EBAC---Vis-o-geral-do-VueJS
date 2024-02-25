@@ -8,24 +8,11 @@ const number = reactive({
 
 const operacaoAritmetica = reactive({
   index: 0,
-  operacoes: ['Adição', 'Subtração', 'Divisão', 'Multiplicação']
+  operacoes: 'Adição'
 })
-
-function escolherOperacao() {
-  if(operacaoAritmetica.index < operacaoAritmetica.operacoes.length - 1) {
-    operacaoAritmetica.index = operacaoAritmetica.index + 1
-  } else {
-    operacaoAritmetica.index = 0;
-  }
-}
 
 function valorNumerico(e) {
   const id = (e.target.id);
-  const arrayTeclas = [...document.getElementsByClassName('calculadora')[0].childNodes];
-  const index = arrayTeclas.findIndex((element) => {
-    return (element.innerHTML == e.target.value)
-  })
-  arrayTeclas[index].style.transform = 'scale(0.9)';
 
   switch (id) {
     case 'number1':
@@ -35,16 +22,7 @@ function valorNumerico(e) {
   }
 }
 
-function voltarEstado(e) {
-  const id = (e.target.id);
-  const arrayTeclas = [...document.getElementsByClassName('calculadora')[0].childNodes];
-  const index = arrayTeclas.findIndex((element) => {
-    return (element.innerHTML == e.target.value)
-  })
-  arrayTeclas[index].style.transform = 'scale(1)';
-}
-
-const resultado = (number1, number2, operacao) => {
+function resultado(number1, number2, operacao) {
   switch (operacao) {
     case 'Adição':
       return (number1 + number2);
@@ -63,26 +41,29 @@ const resultado = (number1, number2, operacao) => {
     <div>
       <h1>Insira os valores a serem calculados</h1>
       <div class="valores">
-        <input type="number" id="number1" placeholder="Selecione um número" @keyup="valorNumerico" @keydown="voltarEstado" max="9" min="0">
-        <input type="number" id="number2" placeholder="Selecione um número" @keyup="valorNumerico" @keydown="voltarEstado" max="9" min="0">
+        <input 
+          type="number" 
+          id="number1" 
+          placeholder="Selecione um número" 
+          @change="valorNumerico">
+        <input 
+          type="number" 
+          id="number2" 
+          placeholder="Selecione um número" 
+          @change="valorNumerico">
       </div>
-      <div class="calculadora">
-        <p>1</p>
-        <p>2</p>
-        <p>3</p>
-        <p>4</p>
-        <p>5</p>
-        <p>6</p>
-        <p>7</p>
-        <p>8</p>
-        <p>9</p>
-        <p>0</p>
-        <button v-on:click="escolherOperacao">{{ operacaoAritmetica.operacoes[operacaoAritmetica.index] }}</button>
+      <div class="operacao">
+        <select @change="evento => operacaoAritmetica.operacoes = evento.target.value">
+          <option value="Adição">Adição</option>
+          <option value="Subtração">Subtração</option>
+          <option value="Multiplicação">Multiplicação</option>
+          <option value="Divisão">Divisão</option>
+        </select>
       </div>
     </div>
     <div>
       <h2>Resultado</h2>
-      <p>{{ resultado(number.number1,number.number2, operacaoAritmetica.operacoes[operacaoAritmetica.index]) }}</p>
+      <p>{{ resultado(number.number1,number.number2, operacaoAritmetica.operacoes) }}</p>
     </div>
   </main>
 </template>
@@ -96,16 +77,20 @@ const resultado = (number1, number2, operacao) => {
     width: 70%;
     margin: auto;
   }
-  main > div:last-child {
-    p {
-      text-align: center;
-      font-size: 1.5em;
-    }
+  
+  p {
+    text-align: center;
+    font-size: 1.5em;
   }
+  
   h1,h2 {
     text-align: center;
   }
-  
+
+  .operacao {
+    display: flex;
+    justify-content: center;
+  }  
   .valores {
     display: flex;
     justify-content: center;
@@ -116,32 +101,7 @@ const resultado = (number1, number2, operacao) => {
       padding: 0.5em;
     };
   }
-  input[type="number"] {
+  input[type="number"], select {
     margin: 1.5em;
-  }
-  .calculadora {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    p {
-      text-align: center;
-      background-color: gray;
-      padding: 1em;
-      margin: 0.5em 1em;
-      border: 1px solid;
-      border-color: black;
-    }
-    button {
-      grid-column: span 2;
-      padding: 1em;
-      margin: 0.5em 1em;
-      background-color: gray;
-      border: 1px solid;
-      border-color: black;
-      text-align: center;
-    }
-  }
-  .select {
-    display: flex;
-    justify-content: center;
   }
 </style>
